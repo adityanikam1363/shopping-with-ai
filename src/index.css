@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sage-bg: #F5F7F2;
+  --color-emerald-primary: #0F766E;
+  --color-teal-secondary: #14B8A6;
+  --color-mint-accent: #A7F3D0;
+  --color-dark-text: #102A27;
+  --color-secondary-text: #64746F;
+  --color-card-white: #FFFFFF;
+  --color-highlight-bg: #ECFDF5;
+  --color-border-sage: #DDE9E5;
+}
+
+@layer utilities {
+  .emerald-gradient-text {
+    background: linear-gradient(135deg, #0F766E 0%, #14B8A6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .emerald-gradient-bg {
+    background: linear-gradient(135deg, #0F766E 0%, #14B8A6 100%);
+  }
+
+  .emerald-glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid #DDE9E5;
+  }
+}
+
+@keyframes float-particle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+  50% { transform: translateY(-12px) rotate(180deg); opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(15, 118, 110, 0.15); }
+  50% { box-shadow: 0 0 25px rgba(20, 184, 166, 0.35); }
+}
+
+.animate-particle {
+  animation: float-particle 4s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s infinite;
+}
