@@ -65,7 +65,7 @@ export default function App() {
       />
 
       {/* Main Sections */}
-      <main>
+      <main className="homepage-sections">
         <HeroSection />
         <AIShoppingAssistant onAddToCart={handleAddToCart} addedItems={addedIds} />
         <RevenueCommandCenter />
