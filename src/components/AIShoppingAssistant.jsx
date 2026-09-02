@@ -6,6 +6,7 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
   const [customInput, setCustomInput] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [appliedVouchers, setAppliedVouchers] = useState({});
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const categoryChips = [
     { label: '🏆 Best Products', query: 'Show me the best top rated products' },
@@ -526,7 +527,9 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
     return dynamicBundles.watch;
   };
 
-  const activeBundle = getActiveBundle(activeQuery);
+  const activeBundle = selectedProduct
+    ? getActiveBundle(selectedProduct.keywords.join(' '))
+    : getActiveBundle(activeQuery);
 
   // Helper to extract numeric budget from query string
   const parseBudgetFromQuery = (query) => {
@@ -544,6 +547,11 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
   const searchCatalog = (query) => {
     const qLower = query.toLowerCase();
     const isBestQuery = qLower.includes('best') || qLower.includes('top') || qLower.includes('rating') || qLower.includes('highest');
+    const isAllProductsQuery = qLower.includes('all products');
+
+    if (isAllProductsQuery) {
+      return { type: 'MATCHED', products: fullCatalog, budget: null, isBest: false };
+    }
 
     // 1. Find category matches
     let categoryMatches = fullCatalog.filter((item) => {
@@ -585,6 +593,7 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
   const searchResult = searchCatalog(activeQuery);
 
   const handleQuerySelect = (q) => {
+    setSelectedProduct(null);
     setActiveQuery(q);
     setIsSearching(true);
     setTimeout(() => setIsSearching(false), 350);
@@ -593,6 +602,7 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
   const handleCustomSubmit = (e) => {
     e.preventDefault();
     if (!customInput.trim()) return;
+    setSelectedProduct(null);
     setActiveQuery(customInput);
     setCustomInput("");
     setIsSearching(true);
@@ -656,6 +666,12 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
                   {chip.label}
                 </button>
               ))}
+              <button
+                onClick={() => handleQuerySelect('Show me all products')}
+                className="text-xs px-3 py-1.5 rounded-lg border border-[#0F766E] bg-[#0F766E] text-white font-semibold hover:bg-[#14B8A6] transition-all"
+              >
+                View All Products
+              </button>
             </div>
           </div>
 
@@ -799,7 +815,8 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
                     return (
                       <div
                         key={item.id}
-                        className="bg-[#F5F7F2] rounded-2xl p-5 border border-[#DDE9E5] space-y-4 relative overflow-hidden"
+                        onClick={() => setSelectedProduct(item)}
+                        className={`bg-[#F5F7F2] rounded-2xl p-5 border border-[#DDE9E5] space-y-4 relative overflow-hidden cursor-pointer ${selectedProduct?.id === item.id ? 'ring-2 ring-[#14B8A6]/40' : ''}`}
                       >
                         <div className="flex items-center space-x-4">
                           <div className="w-24 h-24 rounded-xl bg-white border border-[#DDE9E5] overflow-hidden shrink-0 shadow-xs">
@@ -829,7 +846,10 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
                         <div className="pt-3 border-t border-[#DDE9E5] flex flex-col sm:flex-row items-center justify-between gap-2">
                           {!voucher ? (
                             <button
-                              onClick={() => handleApplyVoucher(item.id, diff)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleApplyVoucher(item.id, diff);
+                              }}
                               className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-[#0F766E] to-[#14B8A6] text-white text-xs font-bold rounded-xl shadow-xs hover:shadow-md transition-all flex items-center justify-center space-x-1.5"
                             >
                               <Tag className="w-3.5 h-3.5 text-[#A7F3D0]" />
@@ -837,7 +857,10 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
                             </button>
                           ) : (
                             <button
-                              onClick={() => onAddToCart({ ...item, price: finalPriceStr })}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onAddToCart({ ...item, price: finalPriceStr });
+                              }}
                               disabled={isAdded}
                               className="w-full sm:w-auto px-5 py-2 bg-[#0F766E] text-white text-xs font-bold rounded-xl shadow-xs flex items-center justify-center space-x-1.5"
                             >
@@ -847,7 +870,10 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
                           )}
 
                           <button
-                            onClick={() => handleQuerySelect("Show me gym workout gear under ₹3,000.")}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleQuerySelect("Show me gym workout gear under ₹3,000.");
+                            }}
                             className="text-xs font-semibold text-[#0F766E] hover:underline"
                           >
                             View Items Under ₹3,000 →
@@ -910,11 +936,17 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
                   return (
                     <div
                       key={item.id}
+                      onClick={() => setSelectedProduct(item)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') setSelectedProduct(item);
+                      }}
+                      role="button"
+                      tabIndex={0}
                       className={`bg-white rounded-2xl p-4 sm:p-5 border transition-all flex flex-col justify-between group overflow-hidden ${
                         isTopRanked
                           ? 'border-2 border-[#0F766E] shadow-md ring-2 ring-[#0F766E]/10'
                           : 'border-[#DDE9E5] hover:border-[#14B8A6] shadow-xs'
-                      }`}
+                      } ${selectedProduct?.id === item.id ? 'ring-2 ring-[#14B8A6]/40' : ''}`}
                     >
                       <div>
                         {/* Rating Rank Badge */}
@@ -964,7 +996,10 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
                         </div>
 
                         <button
-                          onClick={() => onAddToCart(item)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onAddToCart(item);
+                          }}
                           disabled={isAdded}
                           className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
                             isAdded
@@ -1016,6 +1051,11 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
                       </span>
                       <span className="text-xs font-bold text-[#0F766E]">{activeBundle.badge}</span>
                     </div>
+                    {selectedProduct && (
+                      <p className="text-xs font-semibold text-[#0F766E]">
+                        Recommended for: {selectedProduct.name}
+                      </p>
+                    )}
                     <h4 className="text-lg font-extrabold text-[#102A27]">
                       {activeBundle.name}
                     </h4>

@@ -29,8 +29,6 @@ export default function Footer() {
         </div>
 
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#64746F]">
-          <p>© 2026 ShppingwithAI. Built for Commerce Growth.</p>
-          <p className="text-[#A7F3D0]/80">"Turn Customer Intent Into Revenue."</p>
         </div>
 
       </div>
