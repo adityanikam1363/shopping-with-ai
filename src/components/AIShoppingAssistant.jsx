@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bot, User, Star, Plus, Check, Sparkles, AlertCircle, PackageX, Tag, Trophy } from 'lucide-react';
+import { Bot, User, Star, Plus, Check, Sparkles, AlertCircle, PackageX, Tag, Trophy, Mic, Volume2 } from 'lucide-react';
 
 export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
   const [activeQuery, setActiveQuery] = useState("I need a smartwatch for fitness under ₹5,000.");
@@ -7,6 +7,8 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
   const [isSearching, setIsSearching] = useState(false);
   const [appliedVouchers, setAppliedVouchers] = useState({});
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isListening, setIsListening] = useState(false);
+  const [voiceMessage, setVoiceMessage] = useState('');
 
   const categoryChips = [
     { label: '🏆 Best Products', query: 'Show me the best top rated products' },
@@ -31,7 +33,7 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
       reviews: 430,
       match: '96% AI Match',
       desc: 'Quick-adjust steel dumbbells 2.5kg-24kg with non-slip grip.',
-      imageUrl: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=600&auto=format&fit=crop&q=80',
+      imageUrl: 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcT7C4x5OJ5S25HhoqYBXfnFafs7fJqjAePfOejoOF8_G7JDJn86O2KgxzfOduWRDO9GehCmUm5d1OwW5RA-eIShdBi9X1mYqdFwNjVT4NDrzb_OI6-JTDjv-A',
       badge: 'Home Gym Essential',
     },
     {
@@ -45,7 +47,7 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
       reviews: 310,
       match: '91% AI Match',
       desc: '5 level heavy-duty latex bands with door anchor & handles.',
-      imageUrl: 'https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=600&auto=format&fit=crop&q=80',
+      imageUrl: 'https://m.media-amazon.com/images/I/51a4xK2sa+L.jpg',
       badge: 'Portable Gym',
     },
     {
@@ -59,7 +61,7 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
       reviews: 215,
       match: '93% AI Match',
       desc: 'Solid cast iron kettlebell for explosive strength training.',
-      imageUrl: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=600&auto=format&fit=crop&q=80',
+      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSejx5Yd8iWwbuYhEj28DX19VmlNWZ0e4Tfek8NfOy4OA&s=10',
       badge: 'Cast Iron',
     },
     {
@@ -87,7 +89,7 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
       reviews: 640,
       match: '94% AI Match',
       desc: 'High speed ball-bearing steel wire rope for fast cardio burn.',
-      imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80',
+      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStSWuZQw2UCtMW0I9AKFnlDnRwyT_Wbo4YGk70NHQ1GA&s',
       badge: 'High Speed',
     },
 
@@ -166,73 +168,73 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
     // 📱 PHONES (5)
     {
       id: 'prod-phone-1',
-      name: 'Apex 5G Ultra Smartphone',
-      keywords: ['phone', 'phones', 'smartphone', 'mobile', 'android', '5g'],
-      priceNum: 21999,
-      price: '₹21,999',
-      originalPrice: '₹26,999',
+      name: 'Motorola Edge 60 Pro',
+      keywords: ['phone', 'phones', 'smartphone', 'mobile', 'motorola', 'edge 60 pro', '5g'],
+      priceNum: 29999,
+      price: '₹29,999',
+      originalPrice: '₹34,999',
       rating: 4.9,
       reviews: 780,
       match: '95% AI Match',
-      desc: '6.7" 120Hz AMOLED, 108MP AI Camera, 5000mAh & 67W fast charge.',
-      imageUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80',
-      badge: '5G Flagship',
+      desc: 'Immersive pOLED display, pro-grade camera system and ultra-fast TurboPower charging.',
+      imageUrl: 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQdOi-hJUPmDvY-uJoMfDYwcRyCsGj2D6cEC_rmjwjA09FN5tOKVZLWWauP16kw6B4qbDQ0z62Nsq-Q_s41bKHz9sPsCmsiQQ',
+      badge: 'Edge Performance',
     },
     {
       id: 'prod-phone-2',
-      name: 'PixelPro 5G Speed',
-      keywords: ['phone', 'phones', 'smartphone', 'mobile', '5g', 'camera'],
-      priceNum: 32999,
-      price: '₹32,999',
-      originalPrice: '₹39,999',
+      name: 'iPhone 16 Pro',
+      keywords: ['phone', 'phones', 'smartphone', 'mobile', 'iphone', 'apple', 'iphone 16 pro'],
+      priceNum: 119999,
+      price: '₹1,19,999',
+      originalPrice: '₹1,34,999',
       rating: 4.8,
       reviews: 540,
       match: '92% AI Match',
-      desc: 'Snapdragon 8 Gen 2, 50MP Sony OIS Camera, IP68 Waterproof.',
-      imageUrl: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&auto=format&fit=crop&q=80',
-      badge: 'OIS Camera',
+      desc: 'A18 Pro performance, titanium design, Pro camera system and Apple Intelligence.',
+      imageUrl: 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ55vRPqOr2VRBawdkiBfLQhvVMcbrqDBR9DzfFc7Upma6msvufWwmtd_04ycyOpd8eSOv8OJP0X8tzVu19Jmo-rews1Vkj6_6WWBzDGVabTU-IzdKV5Nv7-Q',
+      badge: 'Pro Camera System',
     },
     {
       id: 'prod-phone-3',
-      name: 'Nova Lite 5G Smartphone',
-      keywords: ['phone', 'phones', 'smartphone', 'mobile', 'budget 5g'],
-      priceNum: 14999,
-      price: '₹14,999',
-      originalPrice: '₹18,999',
+      name: 'Samsung Galaxy S26 Ultra',
+      keywords: ['phone', 'phones', 'smartphone', 'mobile', 'samsung', 'galaxy', 's26 ultra', 'samsungs26ultra', '5g'],
+      priceNum: 139999,
+      price: '₹1,39,999',
+      originalPrice: '₹1,54,999',
       rating: 4.6,
       reviews: 620,
       match: '89% AI Match',
-      desc: '6.5" 90Hz Display, Dimensity 6020 5G, 50MP Dual Cam, 5000mAh.',
-      imageUrl: 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=600&auto=format&fit=crop&q=80',
-      badge: 'Best Value 5G',
+      desc: 'Ultra-bright AMOLED display, S Pen productivity, advanced Galaxy AI and 200MP camera.',
+      imageUrl: 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ4FaV8Ww6RTJXDP8SBhmYi62RhXFZo7govRM5-8IwhVMC-tdt0SG2o6BJB1rFL8pMVfPGkLc1hjEjyGm_HwXDHxRoEob-ijOR52kwGnAmU',
+      badge: 'Ultra Flagship',
     },
     {
       id: 'prod-phone-4',
-      name: 'Vanguard Max 5G Flagship',
-      keywords: ['phone', 'phones', 'smartphone', 'mobile', 'premium 5g'],
-      priceNum: 44999,
-      price: '₹44,999',
-      originalPrice: '₹52,999',
+      name: 'vivo X300',
+      keywords: ['phone', 'phones', 'smartphone', 'mobile', 'vivo', 'x300', 'camera', '5g'],
+      priceNum: 74999,
+      price: '₹74,999',
+      originalPrice: '₹84,999',
       rating: 4.9,
       reviews: 310,
       match: '96% AI Match',
-      desc: 'Curved Quad HD+ AMOLED, 200MP Ultra Cam, Wireless Charging.',
-      imageUrl: 'https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&auto=format&fit=crop&q=80',
-      badge: '200MP Camera',
+      desc: 'Flagship ZEISS imaging, high-refresh AMOLED display and powerful all-day performance.',
+      imageUrl: 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcT8meJFlaG-AD37TcVSECL3AkfNVCCduqEPBiEiyijeng8mhJ7-I4xqhByqTEo2VVs4Jvtse0F4reEf-tUS3aCP-tUCBhSSXTUHvHPArW9boGpkmH6081dxmA',
+      badge: 'ZEISS Camera',
     },
     {
       id: 'prod-phone-5',
-      name: 'Pulse Phone 4G Basic',
-      keywords: ['phone', 'phones', 'smartphone', 'mobile', 'budget'],
-      priceNum: 8499,
-      price: '₹8,499',
-      originalPrice: '₹10,999',
+      name: 'OnePlus 13',
+      keywords: ['phone', 'phones', 'smartphone', 'mobile', 'oneplus', 'oneplus 13', 'android', '5g'],
+      priceNum: 69999,
+      price: '₹69,999',
+      originalPrice: '₹79,999',
       rating: 4.4,
       reviews: 490,
       match: '85% AI Match',
-      desc: '6.5" HD+ screen, 13MP Dual camera, 5000mAh long battery life.',
-      imageUrl: 'https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&auto=format&fit=crop&q=80',
-      badge: 'Under ₹10k',
+      desc: 'Snapdragon flagship power, Hasselblad camera system and a smooth 120Hz AMOLED display.',
+      imageUrl: 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcT1oPUglUnjEJX4vMlPcICtj9qdDC2xqG4IwXYIwG5Zq4LNgT0FJvtTUixG21dnysbEkxfzzdh_ox55Jyi0DG79FDml31sdlN8Fgyb_VuOerj12W3npes67cA',
+      badge: 'Fast & Fluid',
     },
 
     // 👟 SHOES & FOOTWEAR (5)
@@ -456,7 +458,7 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
   const dynamicBundles = {
     phone: {
       id: 'bundle-phone',
-      name: 'Apex 5G Phone + 65W Fast Charger & Armor Case',
+      name: '5G Phone + 65W Fast Charger & Armor Case',
       badge: 'Complete Phone Protection Setup',
       desc: 'Bundled with 94% co-purchase rate for new 5G phone buyers.',
       price: '₹23,299',
@@ -553,9 +555,31 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
       return { type: 'MATCHED', products: fullCatalog, budget: null, isBest: false };
     }
 
-    // 1. Find category matches
+    // 1. Prioritize the requested category when queries contain shared terms like "workout".
+    const categoryKeywordGroups = [
+      ['earbuds', 'earbud', 'headphone', 'audio'],
+      ['phone', 'phones', 'smartphone', 'mobile', 'iphone', 'samsung', 'motorola', 'vivo', 'oneplus'],
+      ['laptop', 'laptops', 'computer', 'notebook', 'pc'],
+      ['smartwatch', 'watch'],
+      ['shoe', 'shoes', 'sneaker', 'footwear'],
+      ['gym', 'dumbbell', 'kettlebell', 'yoga'],
+    ];
+    const requestedCategory = categoryKeywordGroups.find((group) =>
+      group.some((keyword) => qLower.includes(keyword))
+    );
+    const normalizedQuery = qLower.replace(/[^a-z0-9]/g, '');
+    const specificPhoneTerms = ['iphone', 'motorola', 'samsung', 'vivo', 'oneplus'];
+    const requestedPhoneTerms = specificPhoneTerms.filter((term) => normalizedQuery.includes(term));
+
     let categoryMatches = fullCatalog.filter((item) => {
-      return item.keywords.some((kw) => qLower.includes(kw)) || item.name.toLowerCase().includes(qLower);
+      const matchesQuery = item.keywords.some((kw) => qLower.includes(kw)) || item.name.toLowerCase().includes(qLower);
+      const matchesRequestedCategory = !requestedCategory || item.keywords.some((kw) =>
+        requestedCategory.includes(kw)
+      );
+      const matchesRequestedPhone = requestedPhoneTerms.length === 0 || item.keywords.some((kw) =>
+        requestedPhoneTerms.includes(kw)
+      );
+      return matchesQuery && matchesRequestedCategory && matchesRequestedPhone;
     });
 
     // If query asks for generic "best products" without a specific category, take top items across all categories
@@ -607,6 +631,43 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
     setCustomInput("");
     setIsSearching(true);
     setTimeout(() => setIsSearching(false), 350);
+  };
+
+  const speakAssistantResponse = () => {
+    if (!('speechSynthesis' in window)) return;
+
+    const response = searchResult.type === 'NOT_FOUND'
+      ? `I could not find products matching ${activeQuery}.`
+      : `I found ${searchResult.products.length} products matching your request. I recommend the ${activeBundle.name}.`;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(response));
+  };
+
+  const startVoiceSearch = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setVoiceMessage('Voice search is not supported in this browser. Try Chrome or Edge.');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.interimResults = false;
+    recognition.onstart = () => {
+      setIsListening(true);
+      setVoiceMessage('Listening... Ask for a product or accessory.');
+    };
+    recognition.onresult = (event) => {
+      const spokenQuery = event.results[0][0].transcript;
+      setCustomInput(spokenQuery);
+      handleQuerySelect(spokenQuery);
+      setVoiceMessage(`You said: “${spokenQuery}”`);
+    };
+    recognition.onerror = () => {
+      setVoiceMessage('I could not hear that. Please try again.');
+    };
+    recognition.onend = () => setIsListening(false);
+    recognition.start();
   };
 
   const handleApplyVoucher = (itemId, voucherAmount) => {
@@ -713,6 +774,15 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
                   <span className="text-[10px] bg-black/20 text-[#A7F3D0] px-2 py-0.5 rounded font-mono">
                     0.09s intent parse
                   </span>
+                  <button
+                    type="button"
+                    onClick={speakAssistantResponse}
+                    className="p-1.5 rounded-lg bg-black/20 hover:bg-black/30 transition-colors"
+                    aria-label="Speak assistant response"
+                    title="Speak response"
+                  >
+                    <Volume2 className="w-3.5 h-3.5 text-[#A7F3D0]" />
+                  </button>
                 </div>
                 
                 <p className="text-sm font-medium text-white">
@@ -753,6 +823,20 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
               className="flex-1 bg-white border border-[#DDE9E5] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#0F766E] text-[#102A27]"
             />
             <button
+              type="button"
+              onClick={startVoiceSearch}
+              disabled={isListening}
+              className={`px-3 py-2.5 border text-sm font-bold rounded-xl transition-all flex items-center justify-center ${
+                isListening
+                  ? 'bg-red-50 text-red-600 border-red-200 animate-pulse'
+                  : 'bg-white text-[#0F766E] border-[#DDE9E5] hover:border-[#0F766E]'
+              }`}
+              aria-label="Start voice search"
+              title="Speak to the assistant"
+            >
+              <Mic className="w-4 h-4" />
+            </button>
+            <button
               type="submit"
               className="px-5 py-2.5 bg-[#0F766E] hover:bg-[#14B8A6] text-white text-sm font-bold rounded-xl transition-all flex items-center space-x-1.5"
             >
@@ -760,6 +844,11 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
               <Sparkles className="w-4 h-4 text-[#A7F3D0]" />
             </button>
           </form>
+          {voiceMessage && (
+            <p className="text-xs font-semibold text-[#0F766E]" role="status">
+              {voiceMessage}
+            </p>
+          )}
 
           {/* Results Area */}
           <div>
