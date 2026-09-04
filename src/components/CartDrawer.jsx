@@ -4,6 +4,7 @@ import { X, ShoppingBag, Trash2, ArrowRight, CheckCircle2, Sparkles, ShieldCheck
 export default function CartDrawer({ isOpen, onClose, cartItems, onRemoveItem, onClearCart }) {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
 
   if (!isOpen) return null;
 
@@ -18,16 +19,78 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onRemoveItem, o
   const aiDiscount = cartItems.length > 1 ? 450 : 0;
   const total = Math.max(0, subtotal - aiDiscount);
 
-  const handleCheckout = () => {
+  const loadRazorpay = () => new Promise((resolve, reject) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => reject(new Error('Unable to load Razorpay Checkout'));
+    document.body.appendChild(script);
+  });
+
+  const handleCheckout = async () => {
     setIsCheckingOut(true);
-    setTimeout(() => {
-      setIsCheckingOut(false);
+    setCheckoutError('');
+
+    try {
+      await loadRazorpay();
+      const createOrderResponse = await fetch('http://localhost:5000/api/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: total, currency: 'INR' }),
+      });
+      const createOrderData = await createOrderResponse.json();
+      if (!createOrderResponse.ok || !createOrderData.success) throw new Error(createOrderData.message || 'Unable to create payment order');
+
+      const paymentResponse = await new Promise((resolve, reject) => {
+        const checkout = new window.Razorpay({
+          key: createOrderData.key,
+          amount: createOrderData.order.amount,
+          currency: createOrderData.order.currency,
+          name: 'Shopping with AI',
+          description: 'Shopping with AI order',
+          order_id: createOrderData.order.id,
+          handler: resolve,
+          modal: { ondismiss: () => reject(new Error('Payment cancelled')) },
+        });
+        checkout.on('payment.failed', () => reject(new Error('Payment failed')));
+        checkout.open();
+      });
+
+      const verifyResponse = await fetch('http://localhost:5000/api/payment/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...paymentResponse,
+          products: cartItems.map((item) => ({
+            productId: item.id,
+            name: item.name,
+            price: item.priceNum || parsePrice(item.price),
+            quantity: 1,
+          })),
+        }),
+      });
+      const verifyData = await verifyResponse.json();
+      if (!verifyResponse.ok || !verifyData.success) throw new Error(verifyData.message || 'Payment verification failed');
+
       setCheckoutSuccess(true);
-    }, 1200);
+      onClearCart();
+    } catch (error) {
+      setCheckoutError(error.message === 'Failed to fetch'
+        ? 'Backend unavailable. Start the backend on port 5000 and try again.'
+        : error.message || 'Payment verification failed');
+    } finally {
+      setIsCheckingOut(false);
+    }
   };
 
   const handleDone = () => {
     setCheckoutSuccess(false);
+    setCheckoutError('');
     onClearCart();
     onClose();
   };
@@ -119,6 +182,11 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onRemoveItem, o
               </div>
             ) : (
               <div className="space-y-3">
+                {checkoutError && (
+                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700" role="alert">
+                    {checkoutError}
+                  </div>
+                )}
                 {cartItems.map((item, idx) => (
                   <div
                     key={`${item.id}-${idx}`}
