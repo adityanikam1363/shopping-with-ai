@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bot, User, Star, Plus, Check, Sparkles, AlertCircle, PackageX, Tag, Trophy, Mic, Volume2 } from 'lucide-react';
+import { Bot, User, Star, Plus, Check, Sparkles, AlertCircle, PackageX, Tag, Trophy, Mic, Volume2, X, ShieldCheck } from 'lucide-react';
 
 export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
   const [activeQuery, setActiveQuery] = useState("I need a smartwatch for fitness under ₹5,000.");
@@ -532,6 +532,27 @@ export default function AIShoppingAssistant({ onAddToCart, addedItems }) {
   const activeBundle = selectedProduct
     ? getActiveBundle(selectedProduct.keywords.join(' '))
     : getActiveBundle(activeQuery);
+
+  const getProductDetails = (product) => {
+    const keywords = product.keywords.join(' ').toLowerCase();
+    const rating = `${product.rating}/5 from ${product.reviews} reviews`;
+    if (keywords.includes('laptop') || keywords.includes('computer')) {
+      return { features: ['AI-ready performance for work and creativity', 'Fast storage for apps and large files', 'Designed for portable productivity'], specifications: [['Category', 'Laptop'], ['Display', product.desc.match(/[^,]+display/i)?.[0] || 'High-resolution display'], ['Storage', product.desc.match(/\d+(?:GB|TB)\s*(?:NVMe|SSD)?/i)?.[0] || 'Solid-state storage'], ['Rating', rating]] };
+    }
+    if (keywords.includes('phone') || keywords.includes('smartphone') || keywords.includes('mobile')) {
+      return { features: ['Fast, responsive everyday performance', 'Pro-grade camera experience', 'Rapid charging for less downtime'], specifications: [['Category', '5G Smartphone'], ['Display', product.desc.match(/[^,]+display/i)?.[0] || 'Immersive display'], ['Connectivity', '5G and Wi-Fi'], ['Rating', rating]] };
+    }
+    if (keywords.includes('earbud') || keywords.includes('headphone') || keywords.includes('audio')) {
+      return { features: ['Clear audio tuned for everyday listening', 'Comfortable fit for active sessions', 'Reliable wireless connection'], specifications: [['Category', 'Wireless Audio'], ['Battery', product.desc.match(/\d+h/i)?.[0] || 'Long-lasting battery'], ['Audio', product.desc.split(',')[0]], ['Rating', rating]] };
+    }
+    if (keywords.includes('shoe') || keywords.includes('running') || keywords.includes('sneaker')) {
+      return { features: ['Cushioned support for active movement', 'Breathable construction for longer wear', 'Traction designed for confident steps'], specifications: [['Category', 'Performance Footwear'], ['Use', 'Running and training'], ['Build', product.desc.split(',')[0]], ['Rating', rating]] };
+    }
+    if (keywords.includes('gym') || keywords.includes('workout') || keywords.includes('fitness') || keywords.includes('yoga')) {
+      return { features: ['Built for consistent home and gym sessions', 'Comfort-focused design for repeat use', 'Practical equipment for daily training'], specifications: [['Category', 'Fitness Gear'], ['Use', 'Workout and training'], ['Build', product.desc.split(',')[0]], ['Rating', rating]] };
+    }
+    return { features: ['Smart everyday design', 'Comfortable for all-day use', 'Selected by the AI shopping assistant'], specifications: [['Category', 'Smart Lifestyle'], ['Product detail', product.desc.split(',')[0]], ['AI match', product.match], ['Rating', rating]] };
+  };
 
   // Helper to extract numeric budget from query string
   const parseBudgetFromQuery = (query) => {
