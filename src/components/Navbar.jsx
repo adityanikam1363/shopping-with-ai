@@ -23,7 +23,7 @@ export default function Navbar({ cartCount, onOpenCart }) {
   ];
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+    <header className={`site-header sticky top-0 z-50 transition-all duration-300 ${
       scrolled ? 'bg-[#F5F7F2]/90 backdrop-blur-md border-b border-[#DDE9E5] shadow-xs' : 'bg-[#F5F7F2] border-b border-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
